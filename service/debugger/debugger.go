@@ -178,6 +178,9 @@ func (d *Debugger) checkGoVersion() error {
 
 // Launch will start a process with the given args and working directory.
 func (d *Debugger) Launch(processArgs []string, wd string) (*proc.Target, error) {
+	if err := verifyBinaryFormat(processArgs[0]); err != nil {
+		return nil, err
+	}
 	switch d.config.Backend {
 	case "native":
 		return native.Launch(processArgs, wd, d.config.Foreground, d.config.DebugInfoDirectories)
